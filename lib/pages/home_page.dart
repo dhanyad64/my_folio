@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_folio/constants/app_colors.dart';
@@ -8,6 +9,7 @@ import 'package:my_folio/constants/app_icons.dart';
 import 'package:my_folio/constants/app_images.dart';
 import 'package:my_folio/constants/app_lotties.dart';
 import 'package:my_folio/controllers/base_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -38,7 +40,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       // backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.only(
             top: 20.0,
@@ -47,7 +49,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Stack(
@@ -60,7 +62,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                       elevation: 4,
                       child: Padding(
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(60),
                           child: Image.asset(
@@ -84,16 +86,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              HtmlWidget(
+              const HtmlWidget(
                 """<p style='text-align:center'><b>Hello, I'm Dhanya.</b> I'm a <b>Flutter developer</b> with <b>1.3+ years</b> of experience in designing and implementing cross-platform mobile applications</p>""",
                 textStyle: TextStyle(
                   fontSize: 20,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               FractionallySizedBox(
@@ -107,8 +109,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       AppColors.primaryMaterialColor,
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(
                       vertical: 15,
                     ),
                     child: Row(
@@ -133,14 +135,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               FractionallySizedBox(
                 widthFactor: .6,
                 child: ElevatedButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
+                  onPressed: () {
+                    _launchUrl(Uri.parse(
+                        "https://tomato-junia-2.tiiny.site/"));
+                  },
+                  style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(
                       Colors.white,
                     ),
@@ -159,7 +164,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Icon(
@@ -171,7 +176,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Wrap(
@@ -192,25 +197,30 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(60),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 15,
-                        horizontal: 15,
+                  InkWell(
+                    onTap: () {
+                      _launchUrl(Uri.parse("https://github.com/dhanyad64"));
+                    },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(60),
                       ),
-                      child: Image.asset(
-                        AppIcons.github,
-                        width: 25,
-                        height: 25,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 15,
+                        ),
+                        child: Image.asset(
+                          AppIcons.github,
+                          width: 25,
+                          height: 25,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Align(
@@ -233,5 +243,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      Fluttertoast.showToast(msg: 'Could not launch $url');
+    }
   }
 }
