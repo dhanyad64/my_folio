@@ -1,0 +1,1 @@
+typedef OnSaved<T> = void Function(T? value);
